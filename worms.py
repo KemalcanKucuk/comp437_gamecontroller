@@ -1,12 +1,14 @@
 #!/opt/anaconda/bin/python
 import pygame, sys, random, os, time, argparse
 from math import cos, sin, pi as PI
-
-import defaults
+import multiprocessing 
+import defaults, controller
+import controller as cont
 from game_classes import *
 from menu_classes import *
 from utils import *
 from defaults import *
+import easygui
         
     
 def main(args):
@@ -25,7 +27,7 @@ def main(args):
     # Music 
     music_path = "sounds/battleTheme.mp3"
     pygame.mixer.music.load(music_path)
-    pygame.mixer.music.play(loops=-1)
+    #pygame.mixer.music.play(loops=-1)
 
     # Creating Menu
     menu = Menu()
@@ -60,6 +62,7 @@ def main(args):
     mode = PLAYER_1
     player1_wins = 0
     player2_wins = 0
+    #easygui.msgbox("Press 'r' to start inputting a voice command\nSay 'left' or 'right' for direction\nSay 'up' or 'down' for aiming\nSay 'stop' for stopping any movement\nSay 'yes' for shooting \n", 'Instructions')
     # main loop
     for _ in range(args.rounds):
         # Creating worms
@@ -76,6 +79,7 @@ def main(args):
         # Creating players
         player1 = Player(*worms_player1, name=args.player1)
         player2 = Player(*worms_player2, name=args.player2)
+        
 
         ## Creating gunpoint object:
         gunpoint = GunPoint(player1.current_worm.rect.x+16+10, player1.current_worm.rect.y-10)
@@ -156,6 +160,7 @@ def main(args):
             clock.tick(FRAME_RATE)
 
             pygame.display.flip()
+
         # Give points to winner of this game and set mode to loser
         if player1_lost:
             player2_wins += 1
@@ -176,6 +181,9 @@ def main(args):
         pygame.display.flip()
         pygame.time.delay(2000)
 
+
+          
+
     # Displaying game over and who won
     screen.fill(BLACK)
     screen.blit(background, (SCREEN_WIDTH // 2, 0))
@@ -195,7 +203,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--worms_number", type=int, default=3, help="Number of worms each player has")
-    parser.add_argument("-t", "--time", type=int, default=10, help="Time per each player")
+    parser.add_argument("-t", "--time", type=int, default=60, help="Time per each player")
     parser.add_argument("-r", "--rounds", type=int, default=4, help="Number of rounds")
     #parser.add_argument("-p", "--point_limit", type=int, required=False, help="Number of points after which game ends")
     parser.add_argument("--no_menu", action="store_true", help="Don't display menu")

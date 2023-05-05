@@ -1,5 +1,4 @@
 import pygame
-
 from defaults import *
 
 class TextObject(pygame.sprite.Sprite):
@@ -37,12 +36,19 @@ class Menu:
 
         # Options
         self.language = EN 
-        self.sound = ON
+        self.sound = OFF
         self.time = 10
+        self.record = "Press 'r' to input a command"                            
+        self.move = "Say 'left' or 'right' for direction"
+        self.aim = "Say 'up' or 'down' for aiming"
+        self.stop = "Say 'stop' for stopping any movement"
+        self.shoot = "Say 'yes' for shooting"
+
 
         self.font = pygame.font.SysFont('Calibri', 25, False, False)
         self.font_bold = pygame.font.SysFont('Calibri', 25, True, False)
         self.font_time = pygame.font.SysFont('Calibri', 70, True, False)
+        self.font_ins = pygame.font.SysFont('Calibri', 11, True, False)
 
         self.click_sound = pygame.mixer.Sound("sounds/buttons_and_clicks/Clic07.mp3.flac")
         self.change_player_sound = pygame.mixer.Sound("sounds/UI_pack_1/ALERT_Appear.wav")
@@ -55,6 +61,12 @@ class Menu:
 
             "sound" : (x, y + 100),
             "sound_option" : (x + 100, y + 100),
+            
+            "record" : (x-20, y + 150),
+            "move" : (x-20, y + 165),
+            "aim" : (x-20, y + 175),
+            "stop" : (x-20, y + 185),
+            "shoot" : (x-20, y + 195),
 
             "time" : (x, SCREEN_HEIGHT - 50),
             "time_display" : (x + 100, SCREEN_HEIGHT - 70)
@@ -68,10 +80,16 @@ class Menu:
 
             "sound" : TextObject("Sound:", *self.positions["sound"], self.font),
             "sound_option" : TextObject(self.sound, *self.positions["sound_option"], self.font),
-
+            "record" : TextObject(self.record, *self.positions["record"], self.font_ins),
+            "move" : TextObject(self.move, *self.positions["move"], self.font_ins),
+            "aim" : TextObject(self.aim, *self.positions["aim"], self.font_ins),
+            "stop" : TextObject(self.stop, *self.positions["stop"], self.font_ins),
+            "shoot" : TextObject(self.shoot, *self.positions["shoot"], self.font_ins),
             "time" : TextObject("TIME:", *self.positions["time"], font=self.font_bold)
             #"time_display": TextObject(str(0), *self.positions["time_display"], self.font)
         }
+        #Tk().wm_withdraw() #to hide the main window
+        #messagebox.showinfo(self.instruction,'OK')
 
     def update_options(self, x, y):
         if self.text_objects["language_option"].rect.collidepoint(x, y):
@@ -102,14 +120,16 @@ class Menu:
                                                           *self.positions["sound_option"],
                                                           self.font)
             if self.sound == ON:
-                pygame.mixer.music.play()
+                pass
+                #pygame.mixer.music.play()
             else:
                 pygame.mixer.music.pause()
 
     def update_time(self, seconds, font=None):
         # Make a sound 1 second before it's time to change players
         if self.sound == ON and seconds == 1:
-            self.change_player_sound.play()
+            pass
+            #self.change_player_sound.play()
         self.time = seconds
         self.text_objects["time_display"] = TextObject(str(seconds), 
                                                         *self.positions["time_display"], 

@@ -9,7 +9,8 @@ Player
 
 import pygame, sys, random, string
 from math import cos, sin, pi as PI
-
+import speech_recognition as sr
+import controller as cont
 from defaults import *
 
 
@@ -99,27 +100,59 @@ class Worm(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.x, self.rect.y = x, y
 
+    def move_by_voice(self, command, bullet_list):
+        if command == "left":
+            self.change_x = -WORM_SPEED
+            self.set_direction("left")
+            self.pressed_left = True
+    
+        if command == "right":
+            self.change_x = WORM_SPEED
+            self.set_direction("right")
+            self.pressed_right = True    
+        
+        if command == "up":
+            self.change_angle = SHOOTING_ANGLE_CHANGE
+        if command == "down":
+            self.change_angle = -SHOOTING_ANGLE_CHANG
+        if command == "yes":
+            self.shooting = True
+            self.shooting_power = 25
+            self.shooting = False
+            self.shoot(bullet_list) 
+
     def move(self, event, bullet_list):
         """Checks where to move and whether user is shooting"""
     
+    
         if event.type == pygame.KEYDOWN:
-            # Moving
-            if event.key == pygame.K_LEFT:
-                self.change_x = -WORM_SPEED
-                self.set_direction("left")
-                self.pressed_left = True
-            elif event.key == pygame.K_RIGHT:
-                self.change_x = WORM_SPEED
-                self.set_direction("right")
-                self.pressed_right = True
-
+            # Recording
+            command = None
+            if event.key == pygame.K_r:
+                command = cont.predict_command()
+                if command != 'stop':
+                    self.move_by_voice(command, bullet_list)
+                else:
+                    self.change_x = 0
+                    self.change_angle = 0
+                
             # Jumping
-            elif event.key == pygame.K_SPACE:
+            if event.key == pygame.K_SPACE:       
                 # You cannot jump if you already are jumping
                 if self.jumping is False:
                     self.jumping = True
                     self.y_0 = self.rect.y
                     self.t = 0
+            # Moving
+            elif event.key == pygame.K_LEFT:
+                self.change_x = -WORM_SPEED
+                self.set_direction("left")
+                self.pressed_left = True
+                
+            elif event.key == pygame.K_RIGHT:
+                self.change_x = WORM_SPEED
+                self.set_direction("right")
+                self.pressed_right = True
 
             # Aiming
             elif event.key == pygame.K_UP:
@@ -299,6 +332,10 @@ class Player:
     def move(self, event, bullet_list):
         """Moves current worm"""
         self.current_worm.move(event, bullet_list)
+
+    def move_by_voice(self, command):
+        """Moves current worm"""
+        self.current_worm.move_by_voice(command)
 
     def stop_worm(self):
         self.current_worm.change_x = 0
