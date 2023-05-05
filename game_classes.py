@@ -9,7 +9,7 @@ Player
 
 import pygame, sys, random, string
 from math import cos, sin, pi as PI
-import speech_recognition as sr
+#import speech_recognition as sr
 import controller as cont
 from defaults import *
 
@@ -114,7 +114,7 @@ class Worm(pygame.sprite.Sprite):
         if command == "up":
             self.change_angle = SHOOTING_ANGLE_CHANGE
         if command == "down":
-            self.change_angle = -SHOOTING_ANGLE_CHANG
+            self.change_angle = -SHOOTING_ANGLE_CHANGE
         if command == "yes":
             self.shooting = True
             self.shooting_power = 25
@@ -123,8 +123,6 @@ class Worm(pygame.sprite.Sprite):
 
     def move(self, event, bullet_list):
         """Checks where to move and whether user is shooting"""
-    
-    
         if event.type == pygame.KEYDOWN:
             # Recording
             command = None

@@ -1,1 +1,6 @@
 pygame
+tensorflow
+numpy
+pyaudio
+ipython
+

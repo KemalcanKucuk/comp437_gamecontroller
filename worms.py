@@ -8,7 +8,6 @@ from game_classes import *
 from menu_classes import *
 from utils import *
 from defaults import *
-import easygui
         
     
 def main(args):

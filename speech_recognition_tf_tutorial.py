@@ -10,14 +10,14 @@ Original file is located at
 #!pip install -U -q tensorflow tensorflow_datasets
 #!apt install --allow-change-held-packages libcudnn8=8.1.0.77-1+cuda11.2
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
+#import seaborn as sns
 import tensorflow as tf
 
-from tensorflow.keras import layers
-from tensorflow.keras import models
-from IPython import display
+#from tensorflow.keras import layers
+#from tensorflow.keras import models
+#from IPython import display
 
 seed = 437
 tf.random.set_seed(seed)
@@ -76,15 +76,12 @@ def get_spectrogram(waveform):
 
 def preprocess_audiobuffer(waveform):
     waveform =  waveform / 32768
-
     waveform = tf.convert_to_tensor(waveform, dtype=tf.float32)
-
     spectogram = get_spectrogram(waveform)
     spectogram = tf.expand_dims(spectogram, 0)
-    
     return spectogram
 
-
+"""
 def plot_spectrogram(spectrogram, ax):
   if len(spectrogram.shape) > 2:
     assert len(spectrogram.shape) == 3
@@ -154,3 +151,4 @@ class ExportModel(tf.Module):
             'class_names': class_names}
 
 
+"""
